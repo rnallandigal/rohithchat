@@ -76,6 +76,7 @@ function sendMessageHandler() {
     tag: "SubmitMessage",
     contents: [ currentChatID, chatBox.value ]
   }));
+  chatBox.value = '';
   return true;
 }
 
@@ -93,6 +94,7 @@ async function newChatHandler() {
       _membership_req_user_id: currentUser._user_id,
       _membership_req_chat_id: chat._chat_id
     });
+    newChatBox.value = '';
   } catch(e) {
     alert(`chat ${newChatBox.value} already exists`);
   }
@@ -108,6 +110,7 @@ async function inviteHandler() {
       _membership_req_user_id: user._user_id,
       _membership_req_chat_id: chat._chat_id
     });
+    inviteBox.value = '';
   } catch(e) {
     alert(`user ${inviteBox.value} not found or is already a member of ${chat._chat_name}`);
   }
