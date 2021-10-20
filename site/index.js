@@ -114,7 +114,7 @@ async function inviteHandler() {
 }
 
 function initWebSocket() {
-  conn = new WebSocket("ws://localhost:8080/ws/v1");
+  conn = new WebSocket(`ws://${location.host}/ws/v1`);
   conn.onopen = openConnection;
   conn.onerror = (event) => {
     console.log(`conn errored`);
