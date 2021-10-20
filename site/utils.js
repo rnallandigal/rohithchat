@@ -6,7 +6,8 @@ function genHTML(html) {
 }
 
 function genMessageFeed(id) {
-  return genHTML(`<div class="flex-grow-1 d-flex flex-column justify-content-end text-wrap text-break d-md-none" id="${id}" style="height: 0; overflow-y: auto;"></div>`);
+//  return genHTML(`<div class="flex-grow-1 d-flex flex-column justify-content-end text-wrap text-break d-none" id="${id}" style="height: 0; overflow-y: auto;"></div>`);
+  return genHTML(`<div class="d-none d-flex flex-column-reverse text-wrap text-break" id="${id}" style="height: 100%; overflow: auto;" ></div>`);
 }
 
 function genChatButton(name, prefix, chatID) {

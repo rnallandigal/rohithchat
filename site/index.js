@@ -39,14 +39,17 @@ window.onload = (event) => {
 };
 
 async function switchChat(newChatID) {
-  document.getElementById(`messageFeed${currentChatID}`).classList.add('d-md-none');
-  document.getElementById(`messageFeed${newChatID}`).classList.remove('d-md-none');
+  document.getElementById(`messageFeed${currentChatID}`).classList.add('d-none');
+  document.getElementById(`messageFeed${newChatID}`).classList.remove('d-none');
   currentChatID = newChatID;
 }
 
 async function signinHandler(event) {
   event.preventDefault();
   event.stopPropagation();
+
+  usernameInput.disabled = true;
+  signinButton.disabled = true;
 
   let username = usernameInput.value;
   let user = await getUser({ _user_query_username: username });
@@ -63,7 +66,7 @@ async function signinHandler(event) {
 
   currentChatID = 1;
   messageFeed0.remove();
-  messageFeed1.classList.remove('d-md-none');
+  messageFeed1.classList.remove('d-none');
   chatBox.focus();
 
   initWebSocket();
@@ -87,7 +90,7 @@ async function newChatHandler() {
     let chat = await newChat({ _chat_req_chatname: newChatBox.value });
     chats.set(chat._chat_id, chat);
     newChatGroup.before(genChatButton(chat._chat_name, 'chatButton', chat._chat_id));
-    sendGroup.before(genMessageFeed(`messageFeed${chat._chat_id}`));
+    feedArea.append(genMessageFeed(`messageFeed${chat._chat_id}`));
     switchChat(chat._chat_id);
 
     await newMembership({
@@ -176,16 +179,16 @@ async function handleMessage(event) {
 async function pushMessage(userID, chatID, content) {
   let feed = document.getElementById(`messageFeed${chatID}`);
   if(currentUser._user_id == userID) {
-    feed.append(genMessage(content));
+    feed.prepend(genMessage(content));
   } else {
-    feed.append(genMessage(content));
+    feed.prepend(genMessage(content));
   }
 }
 
 async function joinChatroom(chatID) {
   let chat = await getChatByID(chatID);
   newChatGroup.before(genChatButton(chat._chat_name, 'chatButton', chatID));
-  sendGroup.before(genMessageFeed(`messageFeed${chatID}`));
+  feedArea.append(genMessageFeed(`messageFeed${chatID}`));
 
   for(let msg of await chatHistory(chatID)) {
     await pushMessage(0, chatID, msg.content);

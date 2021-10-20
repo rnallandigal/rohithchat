@@ -35,7 +35,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Sign in</button>
+            <button type="submit" class="btn btn-primary" id="signinButton">Sign in</button>
           </div>
         </form>
       </div>
@@ -53,8 +53,10 @@
         <button class="border-bottom fs-5 text-center text-white btn btn-secondary" type="button" id="inviteButton">+</button>
       </div>
     </div>
-    <div class="col-10 bg-light d-flex flex-column" id="feedArea">
-      <div class="flex-grow-1 d-flex flex-column justify-content-end text-wrap text-break" id="messageFeed0" style="height: 0; overflow-y: auto;"></div>
+    <div class="col-10 bg-light d-flex flex-column">
+      <div class="flex-grow-1" id="feedArea" style="height: 0;">
+        <div class="d-flex flex-column-reverse text-wrap text-break" id="messageFeed0" style="height: 0; overflow-y: auto;"></div>
+      </div>
       <div class="d-flex" id="sendGroup">
         <input type="text" class="flex-grow-1" id="chatBox"/>
         <button type="button" class="btn btn-primary" id="sendMessageButton">Send</button>
