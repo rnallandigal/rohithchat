@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Rohith Nallandigal">
+  <title>rohithchat</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+</head>
+
+<body class="vh-100 d-flex flex-column">
+  <header id="title-block-header" class="bg-primary bg-gradient shadow d-flex">
+    <h1 class="title fw-light text-white text-opacity-75 my-md-0 py-md-1 ps-md-2 flex-grow-1">rohithchat
+    </h1>
+    <a class="btn fs-5 btn-outline-dark" href="/swagger">Swagger</a>
+    <a class="btn fs-5 btn-outline-dark" href="https://github.com/rnallandigal/rohithchat">Github</a>
+  </header>
+
+  <div class="modal fade" id="welcomeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="mx-auto mb-md-0">Welcome to rohithchat!</h3>
+        </div>
+        <form id="signinForm">
+          <div class="modal-body">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="usernameInput" placeholder="Username" required="">
+              <label for="usernameInput">Username</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Sign in</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-grow-1 d-flex" id="mainContent">
+    <div class="d-flex flex-column col-2 bg-primary bg-opacity-75" id="chatList">
+      <div class="input-group mb-3" id="newChatGroup">
+        <input type="text" class="form-control" id="newChatBox" placeholder="New chat" aria-label="New chat" aria-describedby="newChatButton">
+        <button class="border-bottom fs-5 text-center text-white btn btn-secondary" type="button" id="newChatButton">+</button>
+      </div>
+      <div class="input-group mb-3" id="inviteGroup">
+        <input type="text" class="form-control" id="inviteBox" placeholder="Invite user" aria-label="Invite user" aria-describedby="inviteButton">
+        <button class="border-bottom fs-5 text-center text-white btn btn-secondary" type="button" id="inviteButton">+</button>
+      </div>
+    </div>
+    <div class="col-10 bg-light d-flex flex-column" id="feedArea">
+      <div class="flex-grow-1 d-flex flex-column justify-content-end text-wrap text-break" id="messageFeed0" style="height: 0; overflow-y: auto;"></div>
+      <div class="d-flex" id="sendGroup">
+        <input type="text" class="flex-grow-1" id="chatBox"/>
+        <button type="button" class="btn btn-primary" id="sendMessageButton">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ"
+    crossorigin="anonymous"></script>
+
+  <script src="utils.js"></script>
+  <script src="listGroups.js"></script>
+  <script src="index.js"></script>
+</body>
+
+</html>
+
+<!--
+      <div class="col-4">
+      <div class="list-group" role="tablist">
+        <a class="list-group-item list-group-item-action active" id="listItem1" data-bs-toggle="list"
+          href="#listContent1" aria-controls="listContent1" role="tab" aria-selected="true">
+          item 1
+        </a><a class="list-group-item list-group-item-action" id="listItem2" data-bs-toggle="list" href="#listContent2"
+          aria-controls="listContent2" role="tab" aria-selected="false">
+          item 2
+        </a></div>
+    </div>
+    <div class="col-8 d-flex flex-column">
+      <div class="tab-content flex-grow-1 d-flex">
+        <div class="tab-pane fade align-bottom flex-grow-1 active show" id="listContent1" aria-labelledby="listItem1"
+          role="tabpanel">
+          content 1
+        </div>
+        <div class="tab-pane fade" id="listContent2" aria-labelledby="listItem2" role="tabpanel">
+          content 2
+        </div>
+      </div>
+      <div class="d-flex">
+        <input class="text flex-grow-1">
+        <button class="btn btn-primary">Send</button>
+        <div>
+        </div>
+      </div>
+    </div>
+-->

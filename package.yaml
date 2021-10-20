@@ -1,0 +1,60 @@
+name:                messaging-server
+version:             0.1.0.0
+github:              "rnallandigal/messaging"
+license:             AllRightsReserved
+author:              "Rohith Nallandigal"
+maintainer:          "rnallandigal@gmail.com"
+copyright:           "Copyright (c) 2021 Rohith Nallandigal"
+
+dependencies:
+  - base >= 4.7 && < 5
+  - lens
+  - text
+  - containers
+  - optparse-applicative
+  - aeson
+  - wai
+  - wai-app-static
+  - websockets
+  - wai-websockets
+  - warp
+  - servant-server
+  - servant-swagger
+  - servant-websockets
+  - swagger2
+  - uuid
+  - transformers
+  - sqlite-simple
+  - direct-sqlite
+  - http-types
+  - resource-pool
+  - time
+  - bytestring
+  - exceptions
+  - utf8-string
+
+library:
+  source-dirs: src
+
+executables:
+  main:
+    main:                Main.hs
+    other-modules:       []
+    source-dirs:         app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - messaging-server
+
+tests:
+  test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - messaging-server
