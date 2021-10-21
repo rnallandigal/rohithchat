@@ -13,6 +13,7 @@ import Entity
 import Model
 import QueryUtils
 
+-- Simple queries
 user :: UserQuery -> Connection -> IO [User]
 user (UserQuery i u mp) conn =
     let cs = catMaybes [constraintQ "id" i, constraintQ "username" u]
@@ -44,6 +45,12 @@ membership (MembershipQuery u c mp) conn =
         p = fromMaybe defPagination mp
     in  uncurry (queryNamed conn) $ selectQ "memberships" cs p ""
 
+allMemberships :: MembershipQuery -> Connection -> IO [Membership]
+allMemberships (MembershipQuery u c _) conn =
+    let cs = catMaybes [constraintQ "user_id" u, constraintQ "chat_id" c]
+        p = Pagination (Just (-1)) Nothing
+    in  uncurry (queryNamed conn) $ selectQ "memberships" cs p ""
+
 insertMembership :: MembershipReq -> Connection -> IO ()
 insertMembership (MembershipReq u c) conn =
     execute conn [sql|
@@ -72,3 +79,20 @@ insertMessage (MessageReq u c m) conn =
         insert into messages (user_id, chat_id, content, sent)
                    values (?,?,?,current_timestamp)
     |] (u, c, m)
+
+-- Joins
+chatsByUser :: Int64 -> Connection -> IO [Chat]
+chatsByUser userID conn =
+    query conn [sql|
+        select * from chats where id in (
+            select chat_id from memberships where user_id=?
+        )
+    |] (Only userID)
+
+usersByChat :: Int64 -> Connection -> IO [User]
+usersByChat chatID conn =
+    query conn [sql|
+        select * from users where id in (
+            select user_id from memberships where chat_id=?
+        )
+    |] (Only chatID)

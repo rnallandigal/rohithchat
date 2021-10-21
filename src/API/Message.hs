@@ -38,6 +38,6 @@ postMessage (GlobalState dbPool clientConns) req@(MessageReq u c m) = liftIO $ d
         rowid <- DB.lastInsertRowId conn
         let mq = MessageQuery (Just rowid) Nothing Nothing Nothing
         msg <- Prelude.head <$> Q.message mq conn
-        userIDs <- getUsersByChat conn c
-        return (msg, userIDs)
+        res <- Q.allMemberships (MembershipQuery Nothing (Just c) Nothing) conn
+        return (msg, Prelude.map (\(Membership u _ _) -> u) res)
     liftIO $ broadcast clientConns (const $ PushMessage msg) userIDs

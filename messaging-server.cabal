@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: de7de7c76eb77dfef3eb4e74249513c90814e22e28da043fa9ab4eac53e186a3
+-- hash: 73c1de690e2022333318e50e65b176ffd05cc2dd6385f1b47e52e9511969e563
 
 name:           messaging-server
-version:        0.1.0.0
+version:        0.2.0.0
 homepage:       https://github.com/rnallandigal/messaging#readme
 bug-reports:    https://github.com/rnallandigal/messaging/issues
 author:         Rohith Nallandigal

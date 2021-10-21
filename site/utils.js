@@ -6,14 +6,33 @@ function genHTML(html) {
 }
 
 function genMessageFeed(id) {
-//  return genHTML(`<div class="flex-grow-1 d-flex flex-column justify-content-end text-wrap text-break d-none" id="${id}" style="height: 0; overflow-y: auto;"></div>`);
-  return genHTML(`<div class="d-none d-flex flex-column-reverse text-wrap text-break" id="${id}" style="height: 100%; overflow: auto;" ></div>`);
+  return genHTML(
+    `<div class="d-none d-flex flex-column-reverse feed"
+          id="${id}"
+          style="height: 100%; overflow-y: auto; overflow-x: clip; padding: 15px;">
+    </div>
+  `);
 }
 
 function genChatButton(name, prefix, chatID) {
   return genHTML(`<div class="border-bottom fs-5 text-center text-white btn btn-secondary w-100" id="${prefix}${chatID}" onmouseup="switchChat(${chatID})">${name}</div>`);
 }
 
-function genMessage(content) {
-  return genHTML(`<h3>${content}</h3>`);
+function genAdminMessage(content) {
+  return genHTML(`
+    <div class="chat-message chat-from-admin chat-middle">
+      <p class="msg-content msg-from-admin">${content}</p>
+    </div>
+  `);
+}
+
+function genChatMessage(sender, senderType, content, middleMessage = false) {
+  let dispSender = middleMessage ? 'd-none' : '';
+  let marginStyle = middleMessage ? 'chat-middle' : 'chat-end';
+  return genHTML(`
+    <div class="d-flex flex-column chat-message chat-from-${senderType} ${marginStyle}">
+      <p class="msg-caption ${dispSender}">${sender}</p>
+      <p class="msg-content msg-from-${senderType}">${content}</p>
+    </div>
+  `);
 }

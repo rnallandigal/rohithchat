@@ -55,6 +55,14 @@ async function signinHandler(event) {
   let user = await getUser({ _user_query_username: username });
   currentUser = user ? user : await postUser({ _user_req_username: username });
 
+  for(let user of await getUsersByChat(1)) {
+    users.set(user._user_id, user);
+  }
+
+  for(var chat of await getChatsByUser(currentUser._user_id)) {
+    chats.set(chat._chat_id, chat);
+  }
+
   let memberships = await getMemberships({
     _membership_query_user: currentUser._user_id,
     _membership_query_pagination: { _pagination_size: -1 }
@@ -153,7 +161,7 @@ async function handleMessage(event) {
       await pushMessage(
         user._user_id,
         chat._chat_id,
-        `${user._user_username}: ${data.contents._message_content}`
+        data.contents._message_content
       );
       break;
     case "MembershipUpdate":
@@ -161,7 +169,7 @@ async function handleMessage(event) {
       if(chats.has(data.contents[1])) {
         chat = chats.get(data.contents[1]);
         await pushMessage(
-          user._user_id,
+          0,
           chat._chat_id,
           `${user._user_username} joined the chat`
         );
@@ -178,10 +186,30 @@ async function handleMessage(event) {
 
 async function pushMessage(userID, chatID, content) {
   let feed = document.getElementById(`messageFeed${chatID}`);
-  if(currentUser._user_id == userID) {
-    feed.prepend(genMessage(content));
-  } else {
-    feed.prepend(genMessage(content));
+  let senderType = currentUser._user_id == userID ? 'me' : 'them';
+  let lastSenderType = '';
+  if(feed.firstElementChild != null) {
+    if(feed.firstElementChild.classList.contains('chat-from-me')) {
+      lastSenderType = 'me';
+    } else if(feed.firstElementChild.classList.contains('chat-from-them')) {
+      lastSenderType = 'them';
+    } else {
+      lastSenderType = 'admin';
+    }
+  }
+
+  if(userID == 0) feed.prepend(genAdminMessage(content));
+  else {
+    if(senderType == lastSenderType) {
+      feed.firstElementChild.lastElementChild.classList.add('no-tail');
+    }
+
+    feed.prepend(genChatMessage(
+      (await getUserByID(userID))._user_username,
+      senderType,
+      content,
+      senderType == lastSenderType
+    ));
   }
 }
 
@@ -191,7 +219,7 @@ async function joinChatroom(chatID) {
   feedArea.append(genMessageFeed(`messageFeed${chatID}`));
 
   for(let msg of await chatHistory(chatID)) {
-    await pushMessage(0, chatID, msg.content);
+    await pushMessage(msg.userID, chatID, msg.content);
   }
   return chat;
 }
@@ -201,8 +229,9 @@ async function chatHistory(chatID) {
   for(let msg of await getChatMessages(chatID)) {
     let user = await getUserByID(msg._message_user_id);
     feed.push({
+      userID: user._user_id,
       timestamp: new Date(msg._message_sent),
-      content: `${user._user_username}: ${msg._message_content}`
+      content: msg._message_content
     });
   }
 
@@ -214,6 +243,7 @@ async function chatHistory(chatID) {
   for(let membership of memberships) {
     let user = await getUserByID(membership._membership_user_id);
     feed.push({
+      userID: 0,
       timestamp: new Date(membership._membership_joined),
       content: `${user._user_username} joined the chat`
     });
@@ -297,6 +327,22 @@ async function newMembership(body) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
+  });
+  return await resp.json();
+}
+
+async function getUsersByChat(chatID) {
+  let resp = await fetch(`api/v1/membership/search/users/${chatID}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+  return await resp.json();
+}
+
+async function getChatsByUser(userID) {
+  let resp = await fetch(`api/v1/membership/search/chats/${userID}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
   });
   return await resp.json();
 }

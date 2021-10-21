@@ -49,9 +49,3 @@ broadcast :: MVar (M.Map Int64 WS.Connection)
           -> [Int64]
           -> IO ()
 broadcast mvar msgf = mapM_ $ (\u -> unicast mvar (msgf u) u)
-
-getUsersByChat :: DB.Connection -> Int64 -> IO [Int64]
-getUsersByChat conn chatID =
-    let p = Pagination (Just (-1)) Nothing
-        q = MembershipQuery Nothing (Just chatID) (Just p)
-    in  map (\(Membership u _ _) -> u) <$> Q.membership q conn

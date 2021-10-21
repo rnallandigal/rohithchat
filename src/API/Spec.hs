@@ -36,6 +36,12 @@ type ChatAPI        = "chat" :> "search"
 type MembershipAPI  = "membership" :> "search"
                                    :> ReqBody '[JSON] MembershipQuery
                                    :> Post '[JSON] [Membership]
+                 :<|> "membership" :> "search" :> "users"
+                                   :> Capture "chatID" Int64
+                                   :> Get '[JSON] [User]
+                 :<|> "membership" :> "search" :> "chats"
+                                   :> Capture "userID" Int64
+                                   :> Get '[JSON] [Chat]
                  :<|> "membership" :> ReqBody '[JSON] MembershipReq
                                    :> Post '[JSON] ()
 --                 :<|> "membership" :> ReqBody '[JSON] MembershipReq
